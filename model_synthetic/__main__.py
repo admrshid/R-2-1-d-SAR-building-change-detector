@@ -9,8 +9,15 @@ import keras
 import matplotlib.pyplot as plt
 import time
 import os
+import numpy as np
 
 def main():
+
+  size = 8
+  m = 0.5
+  lr = 0.01
+
+  print(f'running batch size: {size} and momentum: {m} and lr: {lr}')
 
   start_time = time.time()
 
@@ -18,7 +25,7 @@ def main():
 
   labels = synthetic_data()
   train_labels, test_labels = labels.getdata({'train':0.8,'test':0.2})
-  print(f'train_labels:{train_labels}')
+  print(f'train_labels:{train_labels}\n')
 
   traindata = np_synthetic_gen(train_labels,training=True)
   testdata = np_synthetic_gen(test_labels,training=False)
@@ -36,10 +43,10 @@ def main():
   HEIGHT = vid.shape[1]
   WIDTH = vid.shape[2]
 
-  model = create_model(HEIGHT,WIDTH,1)
+  model = create_model(HEIGHT,WIDTH,1,m)
 
   model.compile(loss = keras.losses.SparseCategoricalCrossentropy(from_logits = True), # set loss and type of gradient descent
-                optimizer=tf.keras.optimizers.Adam(learning_rate=0.01), metrics=['accuracy'])
+                optimizer=tf.keras.optimizers.Adam(learning_rate=lr), metrics=['accuracy'])
 
   model.summary()
 
@@ -49,9 +56,9 @@ def main():
 
   end_time = time.time()
 
-  print(f'total time for data prep and training: {end_time-start_time}')
+  print(f'total time for data prep and training: {end_time-start_time}\n')
 
-  model.load_weights('./saved_weights_synthetic/test_1')
+  #model.load_weights('./saved_weights_synthetic/test_1')
 
   ### SECTION 4: Evaluation
 
@@ -62,9 +69,15 @@ def main():
 
   model.evaluate(train_ds, return_dict = True)
 
+  max_train_acc = np.max(history.history['accuracy'])
+  print(f'peak_train_acc: {max_train_acc}')
+
+  mean_train_acc = np.mean(history.history['accuracy'])
+  print(f'mean_train_acc: {mean_train_acc}')
+
   def get_actual_predicted_labels(dataset_ori):
 
-    dataset = tf.data.Dataset.from_generator(dataset_ori, output_signature = output_signature).batch(1)
+    dataset = tf.data.Dataset.from_generator(dataset_ori, output_signature = output_signature).batch(1) #this just tells how much videos you want to predict at once
     actual = [labels for _, labels in dataset_ori()]
     predicted = model.predict(dataset)
 
@@ -87,13 +100,15 @@ def main():
   fig.savefig('./result_synthetic/confusion_matrix_testing.png')
   plt.close(fig)
 
-  precision, recall = calculate_classification_metrics(actual, predicted, ['no_change','change'])
+  precision, recall, accuracy = calculate_classification_metrics(actual, predicted, ['no_change','change'])
+  print(f'train accuracy: {accuracy}')
   print(f'train precision: {precision}')
-  print(f'train recall: {recall}')
+  print(f'train recall: {recall}\n')
 
-  precision, recall = calculate_classification_metrics(actual_1, predicted_1, ['no_change','change'])
+  precision, recall, accuracy = calculate_classification_metrics(actual_1, predicted_1, ['no_change','change'])
+  print(f'test accuracy: {accuracy}')
   print(f'test precision: {precision}')
-  print(f'test recall: {recall}')
+  print(f'test recall: {recall}\n')
 
 if __name__ == "__main__":
 

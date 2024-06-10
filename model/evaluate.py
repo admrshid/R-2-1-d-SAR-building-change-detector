@@ -10,7 +10,7 @@ def plot_history(history):
     fig.set_size_inches(18.5, 10.5)
 
     # Plot loss
-    ax1.set_title('Loss variation through epochs',fontsize=16)
+    ax1.set_title('Training loss variation through epochs',fontsize=16)
     ax1.plot(history.history['loss'], linewidth=1.5)
     ax1.set_ylabel('Loss',fontsize=14)
     ax1.set_xlabel('Epoch',fontsize=14)
@@ -21,7 +21,7 @@ def plot_history(history):
     ax1.set_ylim([0, np.ceil(max_loss)])
 
     # Plot accuracy
-    ax2.set_title('Accuracy variation through epochs',fontsize=16)
+    ax2.set_title('Training accuracy variation through epochs',fontsize=16)
     ax2.plot(history.history['accuracy'], linewidth=1.5)
     ax2.set_ylabel('Accuracy',fontsize=14)
     ax2.set_xlabel('Epoch',fontsize=14)
@@ -63,6 +63,8 @@ def calculate_classification_metrics(y_actual, y_pred, labels):
     
     cm = tf.math.confusion_matrix(y_actual, y_pred)
     tp = np.diag(cm) # Diagonal represents true positives
+    all = np.sum(cm)
+    accuracy = np.sum(tp)/all
     precision = dict()
     recall = dict()
     for i in range(len(labels)):
@@ -76,4 +78,4 @@ def calculate_classification_metrics(y_actual, y_pred, labels):
 
       recall[list(labels)[i]] = tp[i] / (tp[i] + fn) # Recall
 
-    return precision, recall
+    return precision, recall, accuracy

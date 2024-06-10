@@ -17,7 +17,8 @@ setup(
         "keras",
         "seaborn",
         "fnmatch",
-        "einops"
+        "einops",
+        "collections"
     ],
     include_package_data=True,
     package_data={"osm_changes": ["config/*", "default.json"], 

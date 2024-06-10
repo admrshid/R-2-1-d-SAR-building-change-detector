@@ -1,6 +1,7 @@
 import keras
 from keras import layers
 import einops
+import tensorflow as tf
 
 class Conv2Plus1D(keras.layers.Layer):
     def __init__(self, filters, kernel_size, padding):
@@ -117,3 +118,27 @@ class ResizeVideo(keras.layers.Layer):
         })
 
         return config
+    
+
+class InstanceNormalization(layers.Layer):
+    def __init__(self, epsilon=1e-6, **kwargs):
+        super(InstanceNormalization, self).__init__(**kwargs)
+        self.epsilon = epsilon
+
+    def build(self, input_shape):
+        channels = input_shape[-1]
+        self.gamma = self.add_weight(shape=(channels,),
+                                     initializer='ones',
+                                     trainable=True,
+                                     name='gamma')
+        self.beta = self.add_weight(shape=(channels,),
+                                    initializer='zeros',
+                                    trainable=True,
+                                    name='beta')
+        super(InstanceNormalization, self).build(input_shape)
+
+    def call(self, inputs):
+        mean, variance = tf.nn.moments(inputs, axes=[1, 2, 3], keepdims=True)
+        normalized = (inputs - mean) / tf.sqrt(variance + self.epsilon)
+        outputs = self.gamma * normalized + self.beta
+        return outputs

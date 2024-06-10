@@ -17,11 +17,11 @@ cd C:\Users\user\Documents\R(2+1)d SAR building change detector
 
 rem set path to which SAR data is saved to
 echo Setting data path...
-set "path=D:\Swindon_geotiffs\video_dataset"
+set "path=D:\Swindon_geotiffs_2\video_dataset"
 
 rem set decision to form segmented processing
 echo Setting segmentation...
-set "segment=No"
+set "segment=Yes"
 
 rem set expected class names
 echo Setting class names...
@@ -29,8 +29,8 @@ set "classes=change,no_change"
 
 rem set desired frames
 echo Setting frame parameters...
-set "num_frames=359"
-set "frame_step=1"
+set "num_frames=33"
+set "frame_step=11"
 
 rem list out metrics to test
 echo Setting metrics...

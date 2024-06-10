@@ -1,18 +1,19 @@
 from model.Video_classification_modules import Conv2Plus1D
 from model.Video_classification_modules import add_residual_block
 from model.Video_classification_modules import ResizeVideo
+from model.Video_classification_modules import InstanceNormalization
 
 from keras import layers
 import keras
 
-def create_model(HEIGHT,WIDTH,CHANNELS):
+def create_model(HEIGHT,WIDTH,CHANNELS, m,frame):
 
-    input_shape = (None, HEIGHT, WIDTH, CHANNELS) # creates a tuple 
+    input_shape = (frame, HEIGHT, WIDTH, CHANNELS) # creates a tuple 
     input = layers.Input(shape=input_shape) # takes the tuple (10, HEIGHT, WIDTH, 3) as input
     x = input
 
     x = Conv2Plus1D(filters=16, kernel_size=(3, 7, 7), padding='same')(x)
-    x = layers.BatchNormalization()(x)
+    x = layers.BatchNormalization(momentum=m)(x)
     x = layers.ReLU()(x)
     x = ResizeVideo(HEIGHT // 2, WIDTH // 2)(x)
 

@@ -29,7 +29,7 @@ set "classes=change,no_change"
 
 rem set desired frames
 echo Setting frame parameters...
-set "num_frames=5"
+set "num_frames=33"
 set "frame_step=11"
 
 rem list out metrics to test

@@ -63,6 +63,8 @@ def calculate_classification_metrics(y_actual, y_pred, labels):
     
     cm = tf.math.confusion_matrix(y_actual, y_pred)
     tp = np.diag(cm) # Diagonal represents true positives
+    all = np.sum(cm)
+    accuracy = np.sum(tp)/all
     precision = dict()
     recall = dict()
     for i in range(len(labels)):
@@ -76,4 +78,4 @@ def calculate_classification_metrics(y_actual, y_pred, labels):
 
       recall[list(labels)[i]] = tp[i] / (tp[i] + fn) # Recall
 
-    return precision, recall
+    return precision, recall, accuracy
