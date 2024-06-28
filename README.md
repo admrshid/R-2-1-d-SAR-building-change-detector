@@ -2,6 +2,7 @@
 Machine learning model for building change detection
 
 1. Install required packages. Recommended to use separate virtual environment.
-   ```pip install .
+   ```python
+   pip install .
 2. 
    
