@@ -1,5 +1,5 @@
 # R-2-1-d-SAR-building-change-detector
-Machine learning model for building change detection
+Machine learning model for building change detection. Model inspired by https://www.tensorflow.org/tutorials/video/video_classification.
 
 1. Install required packages. Recommended to use separate virtual environment.
    ```python
