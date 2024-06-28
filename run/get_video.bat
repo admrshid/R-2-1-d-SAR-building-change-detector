@@ -23,4 +23,4 @@ rem set decision to form segmented processing
 echo Setting segmentation...
 set "segment=Yes"
 
-"%python_executable%" -m get_video !path! !segment!
+"%python_executable%" -m create_video !path! !segment!
